@@ -1,7 +1,9 @@
 import { EyeIcon } from "@heroicons/react/24/outline";
-import type { Character } from "../types/Character";
+import Loader from "./Loader";
+import { CharacterType } from "@/types/Character";
 
-function CharacterList({ characters }: { characters: Character[] }) {
+function CharacterList({ characters, isLoading }: { characters: CharacterType[], isLoading: boolean }) {
+  if (isLoading) return <div className="characters-list"><Loader /></div>;
   return (
     <div className="characters-list">
       {characters.map((item) => (
@@ -13,7 +15,7 @@ function CharacterList({ characters }: { characters: Character[] }) {
 
 export default CharacterList;
 
-function Character({ item }: { item: Character }) {
+function Character({ item }: { item: CharacterType }) {
   return (
     <div className="list__item">
       <img src={item.image} alt={item.name} />
@@ -29,7 +31,7 @@ function Character({ item }: { item: Character }) {
         <span> - {item.species} </span>
       </div>
       <button className="icon red">
-        <EyeIcon/>
+        <EyeIcon />
       </button>
     </div>
   );
