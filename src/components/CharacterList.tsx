@@ -2,12 +2,29 @@ import { EyeIcon } from "@heroicons/react/24/outline";
 import Loader from "./Loader";
 import { CharacterType } from "@/types/Character";
 
-function CharacterList({ characters, isLoading }: { characters: CharacterType[], isLoading: boolean }) {
-  if (isLoading) return <div className="characters-list"><Loader /></div>;
+function CharacterList({
+  characters,
+  isLoading,
+  onSelectCharacter,
+}: {
+  characters: CharacterType[];
+  isLoading: boolean;
+  onSelectCharacter: (id: number) => void;
+}) {
+  if (isLoading)
+    return (
+      <div className="characters-list">
+        <Loader />
+      </div>
+    );
   return (
     <div className="characters-list">
       {characters.map((item) => (
-        <Character key={item.id} item={item} />
+        <Character
+          key={item.id}
+          item={item}
+          onSelectCharacter={onSelectCharacter}
+        />
       ))}
     </div>
   );
@@ -15,7 +32,13 @@ function CharacterList({ characters, isLoading }: { characters: CharacterType[],
 
 export default CharacterList;
 
-function Character({ item }: { item: CharacterType }) {
+function Character({
+  item,
+  onSelectCharacter,
+}: {
+  item: CharacterType;
+  onSelectCharacter: (id: number) => void;
+}) {
   return (
     <div className="list__item">
       <img src={item.image} alt={item.name} />
@@ -30,7 +53,10 @@ function Character({ item }: { item: CharacterType }) {
         <span> {item.status} </span>
         <span> - {item.species} </span>
       </div>
-      <button className="icon red">
+      <button
+        className="icon red"
+        onClick={() => onSelectCharacter(item.id)}
+      >
         <EyeIcon />
       </button>
     </div>
