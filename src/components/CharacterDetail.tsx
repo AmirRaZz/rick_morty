@@ -1,7 +1,68 @@
 import { ArrowUpCircleIcon } from "@heroicons/react/24/outline";
-import { character, episodes } from "../../data/data";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { CharacterType } from "@/types/Character";
+import Loader from "./Loader";
+import toast from "react-hot-toast";
+import { EpisodeType } from "@/types/Episode";
 
-function CharacterDetail({ selectedId }: { selectedId: number | null }) {
+function CharacterDetail({
+  selectedId,
+  onAddFavorite,
+  isAddToFavorites,
+}: {
+  selectedId: number | null;
+  onAddFavorite: (character: CharacterType) => void;
+  isAddToFavorites: boolean;
+}) {
+  const [character, setCharacter] = useState<CharacterType | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [episodes, setEpisodes] = useState<EpisodeType[]>([]);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        setIsLoading(true);
+        setCharacter(null);
+        const { data } = await axios.get(
+          `https://rickandmortyapi.com/api/character/${selectedId}`
+        );
+        setCharacter(data);
+
+        const episodesId = data.episode.map((e: string) => e.split("/").at(-1));
+        const { data: episodeData } = await axios.get(
+          `https://rickandmortyapi.com/api/episode/${episodesId}`
+        );
+        setEpisodes([episodeData].flat().slice(0, 6));
+      } catch (error: unknown) {
+        if (axios.isAxiosError(error)) {
+          toast.error(
+            error.response?.data?.error || "Error fetching character"
+          );
+        } else {
+          toast.error("An unexpected error occurred");
+        }
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    if (selectedId) fetchData();
+  }, [selectedId]);
+
+  if (isLoading)
+    return (
+      <div style={{ flex: 1 }}>
+        <Loader />
+      </div>
+    );
+
+  if (!character || !selectedId)
+    return (
+      <div style={{ flex: 1, color: "var(--slate-300" }}>
+        Please select a character
+      </div>
+    );
+
   return (
     <div style={{ flex: 1 }}>
       <div className="character-detail">
@@ -27,7 +88,16 @@ function CharacterDetail({ selectedId }: { selectedId: number | null }) {
             <p>{character.location.name}</p>
           </div>
           <div className="actions">
-            <button className="btn btn--primary">Add to Favorite</button>
+            {isAddToFavorites ? (
+              <p>Already added to favorites 💖</p>
+            ) : (
+              <button
+                onClick={() => onAddFavorite(character)}
+                className="btn btn--primary"
+              >
+                Add to Favorite
+              </button>
+            )}
           </div>
         </div>
       </div>
