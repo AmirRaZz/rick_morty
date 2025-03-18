@@ -13,7 +13,13 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [query, setQuery] = useState("");
   const [selectedId, setSelectedId] = useState<number | null>(null);
-  const [favorites, setFavorites] = useState<CharacterType[]>([]);
+  const [favorites, setFavorites] = useState<CharacterType[]>(() =>
+    JSON.parse(localStorage.getItem("FAVORITES") || "[]")
+  );
+
+  useEffect(() => {
+    localStorage.setItem("FAVORITES", JSON.stringify(favorites));
+  }, [favorites]);
 
   useEffect(() => {
     const controller = new AbortController();
