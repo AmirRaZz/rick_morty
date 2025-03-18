@@ -18,6 +18,7 @@ function App() {
   useEffect(() => {
     const controller = new AbortController();
     const signal = controller.signal;
+
     async function fetchData() {
       try {
         setIsLoading(true);
@@ -64,14 +65,21 @@ function App() {
     .map((fav) => fav.id)
     .includes(selectedId as number);
 
+  const handleDeleteFavorite = (id: number) => {
+    setFavorites((prevFavorites) =>
+      prevFavorites.filter((fav) => fav.id !== id)
+    );
+  };
+
   return (
     <div className="app">
       <Toaster />
       <Navbar
         numOfResult={characters.length}
-        numOfFavorites={favorites.length}
+        favorites={favorites}
         query={query}
         setQuery={setQuery}
+        onDeleteFavorite={handleDeleteFavorite}
       />
       <div className="main">
         <CharacterList
