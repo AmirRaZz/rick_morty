@@ -51,20 +51,20 @@ function CharacterDetail({
 
   if (isLoading)
     return (
-      <div style={{ flex: 1 }}>
+      <div className="character-detail-container">
         <Loader />
       </div>
     );
 
   if (!character || !selectedId)
     return (
-      <div style={{ flex: 1, color: "var(--slate-300" }}>
+      <div className="character-detail-container empty-state">
         Please select a character
       </div>
     );
 
   return (
-    <div style={{ flex: 1 }}>
+    <div className="character-detail-container">
       <CharacterSubInfo
         character={character}
         isAddToFavorites={isAddToFavorites}
@@ -87,7 +87,7 @@ const CharacterSubInfo: React.FC<{
       <img
         src={character.image}
         alt={character.name}
-        className="character-detail__image"
+        className="character-detail__img"
       />
       <div className="character-detail__info">
         <h3 className="name">
@@ -127,17 +127,24 @@ const EpisodeList: React.FC<{ episodes: EpisodeType[] }> = ({ episodes }) => {
 
   let sortedEpisodes;
   if (sortBy) {
-    sortedEpisodes = [...episodes].sort((a, b) => new Date(a.created).getTime() - new Date(b.created).getTime());
+    sortedEpisodes = [...episodes].sort(
+      (a, b) => new Date(a.created).getTime() - new Date(b.created).getTime()
+    );
   } else {
-    sortedEpisodes = [...episodes].sort((a, b) => new Date(b.created).getTime() - new Date(a.created).getTime());
+    sortedEpisodes = [...episodes].sort(
+      (a, b) => new Date(b.created).getTime() - new Date(a.created).getTime()
+    );
   }
 
   return (
     <div className="character-episodes">
       <div className="title">
         <h2>List of episodes:</h2>
-        <button onClick={() => setSortBy((is) => !is)} >
-          <ArrowUpCircleIcon className="icon" style={{rotate: sortBy ? "0deg" : "180deg"}} />
+        <button onClick={() => setSortBy((is) => !is)}>
+          <ArrowUpCircleIcon
+            className="icon"
+            style={{ rotate: sortBy ? "0deg" : "180deg" }}
+          />
         </button>
       </div>
       <ul>

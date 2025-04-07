@@ -19,6 +19,7 @@ body {
   width: 100vw;
   min-height: 100vh;
   background-color: var(--slate-900);
+  overflow-x: hidden;
 }
 button {
   background-color: transparent;
@@ -39,6 +40,8 @@ button {
   color: var(--slate-100);
   background-color: var(--slate-500);
   font-size: 1.1rem;
+  width: 100%;
+  max-width: 100%;
 }
 
 .text-field::placeholder {
@@ -85,6 +88,8 @@ button {
   padding: 1rem;
   border-radius: 1rem;
   box-shadow: 1px 1px 50px var(--slate-600);
+  max-height: 90vh;
+  overflow-y: auto;
 }
 
 .modal__header {
@@ -107,6 +112,31 @@ button {
 
 .modal__header .title {
   color: var(--slate-200);
+}
+
+@media (max-width: 480px) {
+  .text-field {
+    padding: 0.6rem 0.8rem;
+    font-size: 1rem;
+  }
+
+  .btn {
+    padding: 0.6rem 0.8rem;
+    font-size: 0.9rem;
+  }
+
+  .modal {
+    padding: 0.8rem;
+  }
+
+  .modal__header .title {
+    font-size: 1.1rem;
+  }
+
+  .icon {
+    width: 1.4rem;
+    height: 1.4rem;
+  }
 }
 
 @media (min-width: 768px) {

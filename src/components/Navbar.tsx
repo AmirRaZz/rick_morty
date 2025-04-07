@@ -22,25 +22,33 @@ function Navbar({
   return (
     <nav className="navbar">
       <div className="navbar__logo">LOGO 😍</div>
-      <input
-        type="text"
-        className="text-field"
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
-        placeholder="Search..."
-      />
+      <div className="navbar__search">
+        <input
+          type="text"
+          className="text-field"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder="Search..."
+        />
+      </div>
       <div className="navbar__result">Found {numOfResult} characters</div>
       <Modal title="List of Favorites" open={isOpen} onOpen={setIsOpen}>
-        {favorites.map((item) => (
-          <Character key={item.id} item={item}>
-            <button
-              className="icon red"
-              onClick={() => onDeleteFavorite(item.id)}
-            >
-              <TrashIcon />
-            </button>
-          </Character>
-        ))}
+        {favorites.length === 0 ? (
+          <p style={{ color: "var(--slate-400)", padding: "1rem 0" }}>
+            No favorites yet
+          </p>
+        ) : (
+          favorites.map((item) => (
+            <Character key={item.id} item={item}>
+              <button
+                className="icon red"
+                onClick={() => onDeleteFavorite(item.id)}
+              >
+                <TrashIcon />
+              </button>
+            </Character>
+          ))
+        )}
       </Modal>
       <button className="heart" onClick={() => setIsOpen((is) => !is)}>
         <HeartIcon className="icon" />
